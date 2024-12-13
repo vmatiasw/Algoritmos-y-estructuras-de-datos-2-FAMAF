@@ -1,0 +1,47 @@
+typedef struct s_node * node;   
+// node seria un puntero a una estructura s_node   (node != struct s_node, node == struct s_node *)
+
+struct s_node {      // defino la estructura s_node...
+    pqueue_elem elem;
+    node next;
+};
+
+struct s_pqueue {
+    node *array;                 // array es un puntero a node (un puntero a un puntero a un struct s_node)
+    priority_t min_priority;
+    unsigned int cantidad_de_elementos;
+    priority_t first_priority;
+    priority_t last_priority;
+};
+
+
+
+
+pqueue pqueue_empty(priority_t min_priority)
+{
+    pqueue q = malloc(sizeof(struct s_pqueue)); // reservo espacio para el struct s_pqueue al que apunta q
+    if (q == NULL)
+    {
+        fprintf(stderr, "Not enough memory\n");
+        exit(EXIT_FAILURE);
+    }
+
+    q->array = calloc(min_priority + 1, sizeof(node)); // reservo espacio para un arreglo tamaño min_priority de elementos tipo node (punteros a struct s_node)
+    // Notar que se uso calloc, es importante inicializar en 0 los elementos del array si se los va a leer. 
+    if ((min_priority + 1) > 0 && q->array == NULL)
+    {
+        fprintf(stderr, "Not enough memory\n");
+        exit(EXIT_FAILURE);
+    }
+
+    q->cantidad_de_elementos = 0;
+    q->first_priority = min_priority;
+    q->last_priority = 0;
+    q->min_priority = min_priority;
+
+    assert(invrep(q) && pqueue_is_empty(q));
+    return q;
+}
+
+
+otra forma de inicializar el array: 
